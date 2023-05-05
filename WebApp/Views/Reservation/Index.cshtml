@@ -70,9 +70,7 @@
                 @if (record.Hours[currHour])
                 {
                      <td>
-                        <input type="hidden" name="hour" value="@currHour" />
-                        <input type="hidden" name="day" value="@record.Date" />
-                        <button type="submit" class="btn btn-outline-warning" href="" role="button">
+                        <button type="submit" class="btn btn-outline-warning" formaction="/Reservation/Index?hour=@(currHour)&amp;day=@(record.Date)" role="button">
 		                    <img src="https://img.icons8.com/ios/50/000000/demand--v1.png"/>
 	                    </button>
                      </td>

@@ -9,18 +9,19 @@ namespace WebApp.Models
         [Display(Name = "Jak se máte?")]
         public string? Subject { get; set; }
 
-        [Display(Name = "Date and Time")]
-        public DateTime DateTime { get; set; }
+        //[Display(Name = "Date and Time")]
+        //public DateTime DateTime { get; set; }
 
-        [Display(Name = "Patient")]
-        public int Patient { get; set; }
+        //[Display(Name = "Patient")]
+        //public Patient Patient { get; set; }
 
         [Display(Name = "Terapeut")]
-        public int? Consultant { get; set; }
+        public Consultant? Consultant { get; set; }
 
         [Display(Name = "Typ schůze")]
         [Required(ErrorMessage = "Please select the event type.")]
         public EventType Type { get; set; }
+
 
         [Display(Name = "Selected EventType Option")]
         [Required(ErrorMessage = "Prosím, vyberte typ sezení.")]

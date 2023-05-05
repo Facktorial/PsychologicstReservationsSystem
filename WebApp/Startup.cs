@@ -61,6 +61,27 @@ namespace WebApp
             });
 
             services.AddRouting(options => options.LowercaseUrls = true);
+
+            services.AddHttpContextAccessor();
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(5);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAuthenticatedUser", policy =>
+                {
+                    policy.RequireAssertion(context =>
+                    {
+                        return context.User.Identity.IsAuthenticated;
+                    });
+                });
+            });
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -80,6 +101,8 @@ namespace WebApp
 
             app.UseRouting();
 
+            app.UseSession();
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -87,6 +110,12 @@ namespace WebApp
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "reservation",
+                    pattern: "/Reservation",
+                    defaults: new { controller = "Reservation", action = "Index" })
+                    .RequireAuthorization("RequireAuthenticatedUser");
             });
 
             app.UseRequestLocalization(app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);

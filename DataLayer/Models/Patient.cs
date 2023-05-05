@@ -1,4 +1,5 @@
 ﻿using DataLayer.Models.Interfaces;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,15 @@ namespace DataLayer.Models
         public override string ToString()
         {
             return $"Name: {Name}, Phone: {PhoneNumber}, Email: {Email}";
+        }
+        public string Serialize()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+
+        public static Patient Deserialize(string str)
+        {
+            return JsonConvert.DeserializeObject<Patient>(str);
         }
     }
 }

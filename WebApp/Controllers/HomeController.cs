@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WebApp.Models;
+using Microsoft.AspNetCore.Http;
+
 
 namespace WebApp.Controllers
 {
@@ -10,10 +12,14 @@ namespace WebApp.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly PatientService patientService;
 
-        public HomeController(ILogger<HomeController> logger, PatientService patientService)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private ISession Session => _httpContextAccessor.HttpContext.Session;
+        public HomeController(ILogger<HomeController> logger, PatientService patientService, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             this.patientService = patientService;
+
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpPost]
@@ -43,8 +49,7 @@ namespace WebApp.Controllers
                     patientService.Mapper.Save();
                 }
 
-                // FIXME
-                // save cookies of patient
+                Session.SetString("Patient", newPatient.Serialize());
 
                 return RedirectToAction("Done", "Patient");
             }

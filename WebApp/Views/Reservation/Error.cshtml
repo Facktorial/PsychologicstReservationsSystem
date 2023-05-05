@@ -1,0 +1,11 @@
+﻿@model Microsoft.AspNetCore.Diagnostics.ExceptionHandlerFeature
+
+<h1>Error</h1>
+<p>There is no Patient in session.</p>
+<p>U have to provide us your personal data, before we will show you our schedule.</p>
+
+@if (Model?.Error != null)
+{
+    <p>@Model.Error.Message</p>
+    <p>@Model.Error.StackTrace</p>
+}

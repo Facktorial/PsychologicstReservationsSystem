@@ -30,16 +30,27 @@ namespace WebApp.Controllers
 
 		private readonly ResourceManager resourceManager;
 
+		private readonly IHttpContextAccessor _httpContextAccessor;
+		private ISession Session => _httpContextAccessor.HttpContext.Session;
+
 		Dictionary<string, string?> DnyCeskyDict;
 		Dictionary<string, string?> SchuzeCeskyDict;
 
-		public ReservationController(ReservationService shi, ConsultantService chi, ResourceManager resourceManager)
+		public ReservationController(
+			ReservationService shi,
+			ConsultantService chi,
+			IHttpContextAccessor httpContextAccessor,
+			ResourceManager resourceManager
+		)
 		{
 			this.reservationService = shi;
 			//this.patientService = phi;
 			this.consultantService = chi;
+
 			this.resourceManager = resourceManager;
-			
+
+			_httpContextAccessor = httpContextAccessor;
+
 			DnyCeskyDict = new Dictionary<string, string?>()
 			{
 				{ "Monday", resourceManager.GetString("Monday") },
@@ -60,15 +71,25 @@ namespace WebApp.Controllers
 			};
 		}
 
+		public IActionResult Error()
+		{
+			return View("Error"); // Specify the full path to the shared error view
+		}
+
 		public IActionResult Index()
 		{
+			if (Session.GetString("Patient") == null)
+			{
+				return RedirectToAction("Error");
+			}
+
 			if (!reservationService.IsFetched)
 			{
 				reservationService.Fetch();
 			}
 
 			ViewBag.Reservations = reservationService.Reservations();
-			ViewBag.Consultants = consultantService.Consultants();
+			ViewBag.Consultants = consultantService.Consultants().Select(x => x.Name);
 			ViewBag.Times = GetTimes();
 			ViewBag.DnyCeskyDict = DnyCeskyDict;
 			ViewBag.Opening = (InitHours, StopHours);
@@ -81,7 +102,7 @@ namespace WebApp.Controllers
 		public IActionResult Index(ReservationForm form, int hour, DateTime day)
 		{
 			ViewBag.Reservations = reservationService.Reservations();
-			ViewBag.Consultants = consultantService.Consultants();
+			ViewBag.Consultants = consultantService.Consultants().Select(x => x.Name);
 			ViewBag.Times = GetTimes();
 			ViewBag.DnyCeskyDict = DnyCeskyDict;
 			ViewBag.Opening = (InitHours, StopHours);
@@ -89,16 +110,17 @@ namespace WebApp.Controllers
 
 			if (ModelState.IsValid)
 			{
-				Console.WriteLine(form.DateTime);
-				//Reservation newReservation = new Reservation
-				//{
-				//	Name = form.Name,
-				//	Email = form.Email,
-				//	PhoneNumber = form.PhoneNumber
-				//};
+				Reservation newReservation = new Reservation
+				{
+					Subject = form.Subject ?? string.Empty,
+					DateTime = new DateTime(day.Year, day.Month, day.Day, hour, 0, 0, 0),
+					Patient = Patient.Deserialize(Session.GetString("Patient")),
+					Consultant = form.Consultant,
+					Type = form.Type
+                };
 
-				//reservationService.Mapper.Insert(newReservation);
-				reservationService.Mapper.Save();
+                reservationService.Mapper.Insert(newReservation);
+                reservationService.Mapper.Save();
 				return RedirectToAction("Done");
 			}
 
@@ -112,6 +134,8 @@ namespace WebApp.Controllers
 
 		public IActionResult Done()
 		{
+			Session.Clear();
+			//Session.Remove("Patient");
 			return View();
 		}
 
