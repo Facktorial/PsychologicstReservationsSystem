@@ -1,6 +1,6 @@
 ﻿using DataLayer.Models;
 using System.ComponentModel.DataAnnotations;
-
+using System.Runtime.ConstrainedExecution;
 
 namespace WebApp.Models
 {
@@ -25,9 +25,9 @@ namespace WebApp.Models
 
         [Display(Name = "Selected EventType Option")]
         [Required(ErrorMessage = "Prosím, vyberte typ sezení.")]
-        public string SelectedEventTypeOption { get; set; } = null;
+        public string SelectedEventTypeOption { get; set; }
 
         [Display(Name = "Selected Consultant Option")]
-        public int? SelectedConsultantOption { get; set; } = null;
+        public Consultant? SelectedConsultantOption { get; set; }
     }
 }

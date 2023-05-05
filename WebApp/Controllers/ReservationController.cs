@@ -115,7 +115,7 @@ namespace WebApp.Controllers
 					Subject = form.Subject ?? string.Empty,
 					DateTime = new DateTime(day.Year, day.Month, day.Day, hour, 0, 0, 0),
 					Patient = Patient.Deserialize(Session.GetString("Patient")),
-					Consultant = form.Consultant,
+					Consultant = form.SelectedConsultantOption,
 					Type = form.Type
                 };
 
