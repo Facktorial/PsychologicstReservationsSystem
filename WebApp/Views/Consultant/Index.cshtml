@@ -1,0 +1,17 @@
+﻿@using DataLayer.Models
+@using WebApp.Models
+
+<h3>Naši terapeuti</h3>
+<ul>
+@foreach(var c in (List<Consultant>) ViewBag.Consultants)
+	{
+		<li>@c</li>
+	}
+</ul>
+
+@if (!string.IsNullOrEmpty(ViewBag.PreviousUrl))
+{
+    <a href="@(ViewBag.PreviousUrl)" class="btn btn-secondary">
+    Zpět
+	</a>
+}

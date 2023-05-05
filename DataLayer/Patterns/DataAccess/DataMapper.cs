@@ -134,12 +134,12 @@ namespace DataLayer
             State.Added.Clear();
         }
 
-        public void Delete(int id)
+        public void Delete(int id)  
         {
-            var tmp = (T) DomainObject.Select(x => x.Id == id);
+            var tmp = (T) DomainObject.FirstOrDefault(x => x.Id == id);
             if (tmp != null)
             {
-                DomainObject.RemoveAt(tmp.Id);
+                DomainObject.RemoveAt(tmp.Id); // FIXME
                 State.Removed.Add(id);
                 State.Added.Remove(tmp.Id);
                 State.Changed.Remove(tmp.Id);

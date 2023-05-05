@@ -1,0 +1,47 @@
+﻿@using WebApp.Models
+
+@model PatientForm
+
+<style>
+    .centered-form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 60vh;
+    }
+
+    .centered-form form {
+        max-width: 800px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        background-color: #f9f9f9;
+        text-align: center;
+    }
+
+	.error-message {
+		color: red;
+	}
+</style>
+
+<div class="centered-form">
+@using (Html.BeginForm())
+{
+	<h3>Vaše osobní údaje</h3>
+	<p>
+		@Html.LabelFor(x => x.Name)
+		@Html.TextBoxFor(x => x.Name)
+		@Html.ValidationMessageFor(x => x.Name, null, new { @class = "error-message" })
+	</p>
+	<p>
+		@Html.LabelFor(x => x.Email)
+		@Html.TextBoxFor(x => x.Email)
+		@Html.ValidationMessageFor(x => x.Email, null, new { @class = "error-message" })
+	</p>
+	<p>
+		@Html.LabelFor(x => x.PhoneNumber)
+		@Html.TextBoxFor(x => x.PhoneNumber)
+		@Html.ValidationMessageFor(x => x.PhoneNumber, null, new { @class = "error-message" })
+	</p>
+	<button type="submit">Send</button>
+}
+</div>

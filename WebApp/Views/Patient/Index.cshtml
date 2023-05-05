@@ -1,0 +1,12 @@
+﻿@using DataLayer.Models
+
+
+@using WebApp.Models
+
+<h3>Naši klienti</h3>
+<ul>
+@foreach(var prod in (List<Patient>)ViewBag.Patients)
+	{
+		<li>@prod</li>
+	}
+</ul>

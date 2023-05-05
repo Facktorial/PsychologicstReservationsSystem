@@ -69,7 +69,7 @@ namespace DataLayer.Models
 
         public override string ToString()
         {
-            return $"Subject: {Subject}, Date: {DateTime}, Type: {Type},\nPatient: {Patient.Name},\nConsultant: {Consultant.Name}\n";
+            return $"Subject: {Subject}, Date: {DateTime}, Type: {Type},\nPatient: {Patient.Name},\nConsultant: {Consultant?.Name}\n";
         }
     }
 }

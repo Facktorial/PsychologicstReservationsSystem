@@ -1,4 +1,4 @@
-namespace WebPsychologicReservations.Models
+namespace WebApp.Models
 {
     public class ErrorViewModel
     {

@@ -126,13 +126,13 @@ namespace DataLayer
             }
         }
 
-        public int GetMaxId<InnerTYpe>()
+        public int GetMaxId<InnerType>()
         {
             using (SQLConnection connection = new SQLConnection(SqlConnect.ConnectionString))
             {
                 connection.Open();
 
-                return GetMaxId<InnerTYpe>(connection);
+                return GetMaxId<InnerType>(connection);
             }
         }
 

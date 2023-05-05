@@ -15,7 +15,7 @@ namespace DataLayer
     {
         public static void CreateTables()
         {
-            SqlConnector SqlConn = new SqlConnector("Data Source=psycho.db");
+            SqlConnector SqlConn = new SqlConnector(@"Data Source=..\..\..\..\Data\psycho.db");
             //SqlConnector.TestDB(SqlConn.ConnectionString);
 
             using (var conn = new SQLiteConnection(SqlConn.ConnectionString))
@@ -28,7 +28,7 @@ namespace DataLayer
 
         public static void Populate()
         {
-            SqlConnector SqlConn = new SqlConnector("Data Source=psycho.db");
+            SqlConnector SqlConn = new SqlConnector(@"Data Source=..\..\..\..\Data\psycho.db");
 
             var patients = new List<Patient>
             {
@@ -44,14 +44,21 @@ namespace DataLayer
                 new Consultant(1, "Ladislav Vyr", "dvo0226@vsb.cz", "+420000000000", Specialization.General),
             };
 
-            DateTime dateTime = new DateTime(2023, 5, 1, 14, 30, 0);
-            DateTime currentDateTime = DateTime.Now;
+            DateTime now = DateTime.Now;
+            var mock_day1 = new DateTime(now.Year, now.Month, now.Day, 8, 0, 0, 0);
+            var mock_day2 = new DateTime(now.Year, now.Month, now.Day, 10, 0, 0, 0);
+            var mock_day3 = new DateTime(now.Year, now.Month, now.Day + 4, 8, 0, 0, 0);
+            var mock_day4 = new DateTime(now.Year, now.Month, now.Day + 4, 10, 0, 0, 0);
+            var mock_day5 = new DateTime(now.Year, now.Month, now.Day + 4, 12, 0, 0, 0);
+            var mock_day6 = new DateTime(now.Year, now.Month, now.Day + 5, 14, 0, 0, 0);
             var reservations = new List<Reservation>
             {
-                new Reservation(0, false, "Pozorovani", dateTime, patients[0], consultants[0], EventType.PeriodicAppoitment),
-                new Reservation(1, false, "Pozorovani", currentDateTime, patients[1], consultants[0], EventType.PeriodicAppoitment),
-                new Reservation(2, false, "Pozorovani", currentDateTime, patients[1], consultants[1], EventType.PeriodicAppoitment),
-                new Reservation(3, false, "Pozorovani", dateTime, patients[0], consultants[1], EventType.PeriodicAppoitment),
+                new Reservation(0, false, "Pozorovani", mock_day1, patients[0], consultants[0], EventType.PeriodicAppoitment),
+                new Reservation(1, false, "Pozorovani", mock_day2, patients[1], consultants[0], EventType.PeriodicAppoitment),
+                new Reservation(2, false, "Pozorovani", mock_day3, patients[1], consultants[1], EventType.PeriodicAppoitment),
+                new Reservation(3, false, "Pozorovani", mock_day4, patients[0], consultants[1], EventType.PeriodicAppoitment),
+                new Reservation(4, false, "Pozorovani", mock_day5, patients[0], consultants[1], EventType.PeriodicAppoitment),
+                new Reservation(5, false, "Pozorovani", mock_day6, patients[0], consultants[1], EventType.PeriodicAppoitment),
             };
 
             var patientsDataMapper = new DataMapper<Patient>(patients, SqlConn);

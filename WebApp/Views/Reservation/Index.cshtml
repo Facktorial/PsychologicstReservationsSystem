@@ -1,0 +1,92 @@
+﻿@using DataLayer.Models
+@using WebApp.Controllers
+@using WebApp.Models
+
+@model ReservationForm
+
+<style>
+    main.ignore-margin-top {
+        margin-top: 0;
+    }
+	.error-message {
+		color: red;
+	}
+</style>
+<div>
+
+@using (Html.BeginForm())
+{
+	<h1>Co jsou vaše potřeby?</h1>
+    <div class="row p-4">
+	    <div class="col">
+		    @Html.LabelFor(x => x.Subject)
+		    @Html.TextBoxFor(x => x.Subject)
+	    </div>
+	    <div class="col">
+        @Html.LabelFor(x => x.Type)
+        @Html.DropDownListFor(
+            m => m.SelectedEventTypeOption,
+            new SelectList(ViewBag.EventType),
+            "Vyberte charakter sezení",
+            new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.SelectedEventTypeOption, null, new { @class = "error-message" })
+       </div>
+       <div class="col">
+        @Html.LabelFor(x => x.Consultant)
+        @Html.DropDownListFor(
+            m => m.SelectedConsultantOption,
+            new SelectList(ViewBag.Consultants),
+            "Vyberte terapeuta",
+            new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Consultant, null, new { @class = "error-message" })
+       </div>
+       <div class="col">
+            <a href="/Consultant/" class="btn btn-secondary">
+                   Naši terapeuti
+            </a>
+        </div>
+    </div>
+
+
+
+<h2 class="pt-1">Možné rezervace</h2>
+<table class="table table-striped table-hover ">
+    <thead>
+        <tr>
+            <th>Čas</th>
+            @foreach (TimeRecord record in (List<TimeRecord>) ViewBag.Times)
+            {
+                <th>@($"{((Dictionary<string, string>) ViewBag.DnyCeskyDict)[record.Day.ToString()]}, \n{record.Date.Date.ToString("dd.MM.")}")</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @for ((int currHour, int barHour) = ((int, int))ViewBag.Opening; currHour <= barHour; currHour += 2)
+        {
+        <tr>
+            <td><div class="text-center mx-auto">@($"{currHour}.00 - {currHour + 2}.00")</div></td>
+            @foreach (TimeRecord record in (List<TimeRecord>) ViewBag.Times)
+            {
+                @if (record.Hours[currHour])
+                {
+                     <td>
+                        <input type="hidden" name="hour" value="@currHour" />
+                        <input type="hidden" name="day" value="@record.Date" />
+                        <button type="submit" class="btn btn-outline-warning" href="" role="button">
+		                    <img src="https://img.icons8.com/ios/50/000000/demand--v1.png"/>
+	                    </button>
+                     </td>
+                }
+                else
+                {
+                        <td></td>
+                }
+
+            }
+        </tr>
+    }
+    </tbody>
+</table>
+}
+
+</div>
