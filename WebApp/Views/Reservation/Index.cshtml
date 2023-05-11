@@ -35,10 +35,9 @@
         @Html.LabelFor(x => x.Consultant)
         @Html.DropDownListFor(
             m => m.SelectedConsultantOption,
-            new SelectList(ViewBag.Consultants),
+            new SelectList(ViewBag.Consultants, "Id", "Name"),
             "Vyberte terapeuta",
             new { @class = "form-control" })
-        @Html.ValidationMessageFor(x => x.Consultant, null, new { @class = "error-message" })
        </div>
        <div class="col">
             <a href="/Consultant/" class="btn btn-secondary">

@@ -28,6 +28,6 @@ namespace WebApp.Models
         public string SelectedEventTypeOption { get; set; }
 
         [Display(Name = "Selected Consultant Option")]
-        public Consultant? SelectedConsultantOption { get; set; }
+        public int? SelectedConsultantOption { get; set; }
     }
 }

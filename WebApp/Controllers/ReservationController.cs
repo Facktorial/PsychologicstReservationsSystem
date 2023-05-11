@@ -89,7 +89,7 @@ namespace WebApp.Controllers
 			}
 
 			ViewBag.Reservations = reservationService.Reservations();
-			ViewBag.Consultants = consultantService.Consultants().Select(x => x.Name);
+			ViewBag.Consultants = consultantService.Consultants();
 			ViewBag.Times = GetTimes();
 			ViewBag.DnyCeskyDict = DnyCeskyDict;
 			ViewBag.Opening = (InitHours, StopHours);
@@ -98,11 +98,42 @@ namespace WebApp.Controllers
 			return View();
 		}
 
+		public T? GetEnumDict<T>(Dictionary<string, string> dict, string suspect) where T : struct, Enum
+        {
+			foreach ((var key, var value) in dict)
+			{
+				if (suspect == value)
+				{
+					T enumValue;
+					if (Enum.TryParse<T>(key, out enumValue))
+					{
+						return enumValue;
+					}
+				}
+			}
+			return default(T?);
+		}
+
+		public T? GetEnum<T>(IEnumerable<string> source, string suspect) where T : struct, Enum
+		{
+			foreach (var value in source)
+			{
+				if (suspect == value)
+				{
+					T enumValue;
+					if (Enum.TryParse<T>(value, out enumValue))
+					{
+						return enumValue;
+					}
+				}
+			}
+			return default(T?);
+		}
+
 		[HttpPost]
 		public IActionResult Index(ReservationForm form, int hour, DateTime day)
 		{
-			ViewBag.Reservations = reservationService.Reservations();
-			ViewBag.Consultants = consultantService.Consultants().Select(x => x.Name);
+			ViewBag.Consultants = consultantService.Consultants();
 			ViewBag.Times = GetTimes();
 			ViewBag.DnyCeskyDict = DnyCeskyDict;
 			ViewBag.Opening = (InitHours, StopHours);
@@ -110,13 +141,17 @@ namespace WebApp.Controllers
 
 			if (ModelState.IsValid)
 			{
+				EventType? event_ack = GetEnumDict<EventType>(SchuzeCeskyDict, form.SelectedEventTypeOption);
+				
+				if (event_ack is null) { return View("ErrorNoTranslation"); }
+
 				Reservation newReservation = new Reservation
 				{
 					Subject = form.Subject ?? string.Empty,
 					DateTime = new DateTime(day.Year, day.Month, day.Day, hour, 0, 0, 0),
 					Patient = Patient.Deserialize(Session.GetString("Patient")),
-					Consultant = form.SelectedConsultantOption,
-					Type = form.Type
+					Consultant = consultantService.Consultants().FirstOrDefault(form.Consultant),
+					Type = (EventType) event_ack,
                 };
 
                 reservationService.Mapper.Insert(newReservation);
@@ -139,16 +174,15 @@ namespace WebApp.Controllers
 			return View();
 		}
 
-		public override void OnActionExecuted(ActionExecutedContext context)
-		{
-			if (!reservationService.IsFetched)
-			{
-				reservationService.Fetch();
-			}
-			ViewBag.ReservationCount = reservationService.Reservations().Count;
-		}
+		//public override void OnActionExecuted(ActionExecutedContext context)
+		//{
+		//	if (!reservationService.IsFetched)
+		//	{
+		//		reservationService.Fetch();
+		//	}
+		//	ViewBag.ReservationCount = reservationService.Reservations().Count;
+		//}
 
-		//public List<(DateTime, DayOfWeek, List<int>)> GetTimes()
 		public List<TimeRecord> GetTimes()
 		{
 			DateTime now = DateTime.Now;
@@ -165,12 +199,6 @@ namespace WebApp.Controllers
 			foreach ((DateTime date, DayOfWeek day) in datesUntilNextFriday)
 			{
 				var possibles = DayPossibleVisits(date, hours);
-
-				//Console.WriteLine(day);
-				//foreach ((var k, var v) in possibles)
-    //            {
-				//	Console.WriteLine($"{k}: {v}");
-    //            }
 
 				result.Add(new TimeRecord(date, day, possibles));
 			}

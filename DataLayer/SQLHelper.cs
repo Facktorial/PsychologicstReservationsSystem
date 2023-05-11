@@ -77,6 +77,8 @@ namespace DataLayer
                 if (attribute != null)
                 {
                     value = ((IEntity)property.GetValue(obj))?.Id;
+                    //if (value == null) { value = "NULL"; } // TODO
+                    if (value == null) {  value = DBNull.Value; } // TODO
                 }
                 else
                 {

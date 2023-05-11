@@ -45,8 +45,16 @@ namespace WebApp.Controllers
                     .Any(person => person.Name == newPatient.Name && person.Email == newPatient.Email && person.PhoneNumber == newPatient.PhoneNumber)
                 )
                 {
+                    newPatient.Id = patientService.Mapper.Max(x => x.Id + 1);
                     patientService.Mapper.Insert(newPatient);
                     patientService.Mapper.Save();
+                }
+                else
+                {
+                    newPatient.Id = patientService.Mapper.DomainObject
+                        .Where(person => person.Name == newPatient.Name && person.Email == newPatient.Email && person.PhoneNumber == newPatient.PhoneNumber)
+                        .Select(x => x.Id)
+                        .FirstOrDefault();
                 }
 
                 Session.SetString("Patient", newPatient.Serialize());

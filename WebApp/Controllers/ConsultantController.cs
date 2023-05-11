@@ -29,13 +29,13 @@ namespace WebApp.Controllers
 			return View();
 		}
 
-		public override void OnActionExecuted(ActionExecutedContext context)
-		{
-			if (!consultantService.IsFetched)
-			{
-				consultantService.Fetch();
-			}
-			ViewBag.PatientCount = consultantService.Consultants().Count;
-		}
+		//public override void OnActionExecuted(ActionExecutedContext context)
+		//{
+		//	if (!consultantService.IsFetched)
+		//	{
+		//		consultantService.Fetch();
+		//	}
+		//	ViewBag.PatientCount = consultantService.Consultants().Count;
+		//}
 	}
 }

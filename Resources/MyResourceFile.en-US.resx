@@ -118,36 +118,36 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CriticalAppoitment" xml:space="preserve">
-    <value>CriticalAppoitment</value>
+    <value>Krizové sezení</value>
   </data>
   <data name="Friday" xml:space="preserve">
-    <value>Friday</value>
+    <value>Pátek</value>
   </data>
   <data name="Monday" xml:space="preserve">
-    <value>Monday</value>
+    <value>Pondělí</value>
   </data>
   <data name="NewAppoitment" xml:space="preserve">
-    <value>NewAppoitment</value>
+    <value>První schůzka</value>
   </data>
   <data name="PeriodicAppoitment" xml:space="preserve">
-    <value>PeriodicAppoitment</value>
+    <value>Kontrola</value>
   </data>
   <data name="Register" xml:space="preserve">
-    <value>Register</value>
+    <value>Registrace</value>
   </data>
   <data name="Saturday" xml:space="preserve">
-    <value>Saturday</value>
+    <value>Sobota</value>
   </data>
   <data name="Sunday" xml:space="preserve">
-    <value>Sunday</value>
+    <value>Neděle</value>
   </data>
   <data name="Thursday" xml:space="preserve">
-    <value>Thursday</value>
+    <value>Čtvrtek</value>
   </data>
   <data name="Tuesday" xml:space="preserve">
-    <value>Tuesday</value>
+    <value>Úterý</value>
   </data>
   <data name="Wednesday" xml:space="preserve">
-    <value>Wednesday</value>
+    <value>Středa</value>
   </data>
 </root>

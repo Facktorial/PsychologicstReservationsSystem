@@ -7,15 +7,12 @@ namespace WebApp.Models
     {
         public override bool IsValid(object value)
         {
-            if (value == null)
-                return false;
+            if (value == null) { return false; }
 
             string phoneNumber = value.ToString();
 
-            // Define a regular expression pattern for a phone number
             string pattern = @"^(\+\d{1,3})?\d{9}$";
 
-            // Check if the phone number matches the pattern
             return System.Text.RegularExpressions.Regex.IsMatch(phoneNumber, pattern);
         }
     }

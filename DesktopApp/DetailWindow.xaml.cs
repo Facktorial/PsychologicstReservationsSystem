@@ -1,6 +1,8 @@
 ﻿using DataLayer.Models;
+using DesktopApp.Converters;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,36 +20,52 @@ namespace DesktopApp
     /// <summary>
     /// Interaction logic for DetailWindow.xaml
     /// </summary>
+    public delegate void SaveReservation(Reservation reservation);
+    public delegate void DeleteReservation(Reservation reservation);
 
     public partial class DetailWindow : Window
     {
-        private Reservation Reservation;
+        private Reservation originalReservation;
+        public event SaveReservation OnSaveReservation;
+        public event SaveReservation OnDeleteReservation;
+        public Reservation Reservation {  get; set; }
+        public ObservableCollection<Consultant> Consultants { get; set; }
+        public ObservableCollection<EventType> EnumValues { get; set; }
+        public LocalizationConverter Conv { get; set; }
 
-        public DetailWindow(Reservation reservation)
+        public DetailWindow(
+            Reservation reservation,
+            ObservableCollection<Consultant> consultants,
+            ObservableCollection<EventType> reservationsEvent,
+            LocalizationConverter conv
+        )
         {
+            originalReservation = new Reservation(reservation);
+            Reservation = reservation;
+            Consultants = consultants;
+            EnumValues = reservationsEvent;
+            Conv = conv;
+
+            DataContext = this;
+
             InitializeComponent();
-            this.Reservation = reservation;
-            DataContext = reservation;
         }
 
-        private void UpdateReservation_Click(object sender, RoutedEventArgs e)
+        private void Save(object sender, RoutedEventArgs e)
         {
-            // Perform the necessary update logic based on the changes made in the UI
-            // For example:
-            // reservation.Property1 = newValue1;
-            // reservation.Property2 = newValue2;
-
-            // Save the changes to the database using your DataMapper or other data access logic
-
+            if (Reservation.Consultant != originalReservation.Consultant
+            || Reservation.DateTime != originalReservation.DateTime
+            || Reservation.Subject != originalReservation.Subject
+            || Reservation.Type != originalReservation.Type) // BECAUSE NOT USING NOTIFY ONCHANGE
+                OnSaveReservation?.Invoke(Reservation);
             Close();
         }
 
         private void DeleteReservation_Click(object sender, RoutedEventArgs e)
         {
-            // Perform the necessary deletion logic
-            // For example:
-            // Delete the reservation from the database using your DataMapper or other data access logic
+            //Reservation.IsCanceled = true;
 
+            OnDeleteReservation?.Invoke(Reservation);
             Close();
         }
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -60,6 +78,11 @@ namespace DesktopApp
             {
                 DragMove();
             }
+        }
+
+        private void DateTime_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

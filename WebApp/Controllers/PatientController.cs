@@ -36,13 +36,13 @@ namespace WebApp.Controllers
 		{
 			return new JsonResult(ps.Patients());
 		}
-		public override void OnActionExecuted(ActionExecutedContext context)
-		{
-			if (!patientService.IsFetched)
-            {
-				patientService.Fetch();
-            }
-			ViewBag.PatientCount = patientService.Patients().Count;
-		}
+		//public override void OnActionExecuted(ActionExecutedContext context)
+		//{
+		//	if (!patientService.IsFetched)
+  //          {
+		//		patientService.Fetch();
+  //          }
+		//	ViewBag.PatientCount = patientService.Patients().Count;
+		//}
 	}
 }

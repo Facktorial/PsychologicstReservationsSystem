@@ -71,7 +71,7 @@ namespace DataLayer
 
         public void Update(int index, T obj, int id)
         {
-            if (index > 0 || index < DomainObject.Count)
+            if (index > 0 && index < DomainObject.Count)
             {
                 DomainObject[index] = obj;
                 DomainObject[index].Id = id;
@@ -139,7 +139,8 @@ namespace DataLayer
             var tmp = (T) DomainObject.FirstOrDefault(x => x.Id == id);
             if (tmp != null)
             {
-                DomainObject.RemoveAt(tmp.Id); // FIXME
+                var item = DomainObject.FirstOrDefault(x => x.Id == tmp.Id);
+                if (item != null) { DomainObject.Remove(item); }
                 State.Removed.Add(id);
                 State.Added.Remove(tmp.Id);
                 State.Changed.Remove(tmp.Id);

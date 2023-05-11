@@ -1,0 +1,11 @@
+﻿@model Microsoft.AspNetCore.Diagnostics.ExceptionHandlerFeature
+
+<h1>Error</h1>
+<p>There is no translation.</p>
+<p>Developer has to provide translation before you can use this choices.</p>
+
+@if (Model?.Error != null)
+{
+    <p>@Model.Error.Message</p>
+    <p>@Model.Error.StackTrace</p>
+}

@@ -67,9 +67,20 @@ namespace DataLayer.Models
             Consultant = cons;
         }
 
+        public Reservation(Reservation r)
+        {
+            Id = r.Id;
+            IsCanceled = r.IsCanceled;
+            Subject = r.Subject;
+            DateTime = r.DateTime;
+            Type = r.Type;
+            Patient = r.Patient;
+            Consultant = r.Consultant;
+        }
+
         public override string ToString()
         {
-            return $"Subject: {Subject}, Date: {DateTime}, Type: {Type},\nPatient: {Patient.Name},\nConsultant: {Consultant?.Name}\n";
+            return $"#{(IsCanceled ? "Canceled" : " active")},\tSubject: {Subject}, Date: {DateTime}, Type: {Type},\nPatient: {Patient.Name},\nConsultant: {Consultant?.Name}\n";
         }
     }
 }
